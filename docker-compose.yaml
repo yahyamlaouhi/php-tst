@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  # Web Server Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+
+  #Database Service
+  # db:
+  #   image : mysql
+  #   container_name : mysql
+  #   volumes:
+  #     - ./mysql/data:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_DATABASE: blog
+  #     MYSQL_ROOT_PASSWORD: password
+  # db:
+  #   image: postgres
+  #   container_name: postgres
+  #   volumes:
+  #     - ./postgresql/data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   environment: 
+  #     POSTGRES_DB: blog
+  #     POSTGRES_USER: root 
+  #     POSTGRES_PASSWORD: password 
+
+  # Application Service
+  app:
+    container_name: app
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www
+    ports:
+      - "9000:9000"
+    working_dir: /var/www
+
